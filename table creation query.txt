@@ -1,0 +1,48 @@
+CREATE DATABASE IF NOT EXISTS db_doccontrol CHARACTER SET utf8;
+
+USE db_doccontrol;
+
+CREATE TABLE tbl_procedures(
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+doc_no VARCHAR(30) NULL,
+doc_title VARCHAR(200) NOT NULL,
+department VARCHAR(50) NOT NULL,
+revision CHAR(2) NOT NULL DEFAULT '00',
+status ENUM('Pending', 'Effective', 'Obsolete', 'For Abolish') NOT NULL DEFAULT 'Pending',
+revision_status VARCHAR(40) NOT NULL,
+purpose TEXT NULL,
+requestor_id CHAR(5) NOT NULL,
+request_date DATE NULL,
+effectivity_date DATE NOT NULL,
+remarks TEXT NULL,
+file_name VARCHAR(255) NULL,
+content_type VARCHAR(100) NULL,
+file_size INT UNSIGNED NULL,
+file_data LONGBLOB NULL,
+PRIMARY KEY (id),
+UNIQUE KEY uq_docno_rev (doc_no, revision),
+KEY idx_requestor (requestor_id),
+KEY idx_status (status)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE tbl_user (
+employee_id CHAR(5) NOT NULL,
+username VARCHAR(100) NOT NULL,
+password VARCHAR(255) NOT NULL,
+fullname VARCHAR(100) NOT NULL,
+section VARCHAR(50) NOT NULL,
+role ENUM('EMPLOYEE', 'DCC', 'ADMR', 'AGMR', 'ADMIN') NOT NULL  DEFAULT 'EMPLOYEE',
+account_status ENUM('PENDING', 'ACTIVE', 'INACTIVE') NOT NULL DEFAULT 'PENDING',
+PRIMARY KEY (employee_id),
+UNIQUE KEY uq_username(username)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+SELECT * FROM tbl_procedures;
+SELECT * FROM tbl_user t;
+
+SHOW TABLES;
+DESCRIBE tbl_procedures;
+SHOW VARIABLES LIKE 'max_allowed_packet';
+
+SELECT employee_id, fullname, account_status FROM tbl_user;

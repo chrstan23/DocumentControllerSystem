@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "dgSpecHash": "RItm2cy+A/Y=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\IT\\Documents\\christian\\Web\\DocumentControllerSystem\\backend\\DocControl.Api\\DocControl.Api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\IT\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.10\\microsoft.aspnetcore.openapi.10.0.10.nupkg.sha512",
+    "C:\\Users\\IT\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512",
+    "C:\\Users\\IT\\.nuget\\packages\\system.data.odbc\\10.0.14\\system.data.odbc.10.0.14.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "projectPath": "C:\\Users\\IT\\Documents\\christian\\Web\\DocumentControllerSystem\\backend\\DocControl.Api\\DocControl.Api.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\IT\\Documents\\christian\\Web\\DocumentControllerSystem\\backend\\DocControl.Api\\DocControl.Api.csproj",
+      "libraryId": "Microsoft.OpenApi",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}
