@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "RItm2cy+A/Y=",
+  "dgSpecHash": "ngKrtnILdXU=",
   "success": true,
   "projectFilePath": "C:\\Users\\IT\\Documents\\christian\\Web\\DocumentControllerSystem\\backend\\DocControl.Api\\DocControl.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\IT\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.10\\microsoft.aspnetcore.openapi.10.0.10.nupkg.sha512",
     "C:\\Users\\IT\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512",
-    "C:\\Users\\IT\\.nuget\\packages\\system.data.odbc\\10.0.14\\system.data.odbc.10.0.14.nupkg.sha512"
+    "C:\\Users\\IT\\.nuget\\packages\\mysqlconnector\\2.6.2\\mysqlconnector.2.6.2.nupkg.sha512"
   ],
   "logs": [
     {

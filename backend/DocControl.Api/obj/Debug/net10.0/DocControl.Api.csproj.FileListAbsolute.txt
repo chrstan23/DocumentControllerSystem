@@ -32,3 +32,4 @@ C:\Users\IT\Documents\christian\Web\DocumentControllerSystem\backend\DocControl.
 C:\Users\IT\Documents\christian\Web\DocumentControllerSystem\backend\DocControl.Api\obj\Debug\net10.0\DocControl.Api.pdb
 C:\Users\IT\Documents\christian\Web\DocumentControllerSystem\backend\DocControl.Api\obj\Debug\net10.0\DocControl.Api.genruntimeconfig.cache
 C:\Users\IT\Documents\christian\Web\DocumentControllerSystem\backend\DocControl.Api\obj\Debug\net10.0\ref\DocControl.Api.dll
+C:\Users\IT\Documents\christian\Web\DocumentControllerSystem\backend\DocControl.Api\bin\Debug\net10.0\MySqlConnector.dll
