@@ -11,16 +11,16 @@ builder.Services.AddScoped<IRequestorService, RequestorService>();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IProcedureService, ProcedureService>();
 
-const long maxRequestBytes = 210L * 1024 *1024;
-builder.Services.Configure<FormOptions>(o => o.MultipartBodyLengthLimit = maxRequestBytes);
-builder.WebHost.ConfigureKestrel( o => o.Limits.MaxRequestBodySize = maxRequestBytes);
+const long maxRequestBytes = 210L * 1024 *1024; //max MB for files
+builder.Services.Configure<FormOptions>(o => o.MultipartBodyLengthLimit = maxRequestBytes); //Procedure Services
+builder.WebHost.ConfigureKestrel( o => o.Limits.MaxRequestBodySize = maxRequestBytes);  //Procedure Services
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
         policy.WithOrigins("http://localhost:5173")
                 .AllowAnyHeader()
                 .AllowAnyMethod());
-});
+}); //Connection for frontend address and port
 
 
 var app = builder.Build();
