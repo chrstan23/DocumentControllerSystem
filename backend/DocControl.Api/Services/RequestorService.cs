@@ -9,7 +9,7 @@ public class RequestorService : IRequestorService
 
     public RequestorService(IConfiguration config)
     {
-        _connectionString = config.GetConnectionString("DocControl") ?? throw new InvalidOperationException("Missing connection string'DocControl'.");
+        _connectionString = config.GetConnectionString("DocControl") ?? throw new InvalidOperationException("Can't connect to the database.");
 
     }
 
