@@ -90,4 +90,59 @@ public class ProcedureService : IProcedureService
         return new AddProcedureResult { Status = status, Message = message};
     }
 
+    public List<ProcedureListItem> GetMasterlist()
+    {
+        var items = new List<ProcedureListItem>();
+
+        using var conn = new MySqlConnection(_connectionString);
+        conn.Open();
+
+        var sql = @"SELECT a.id, a.doc_no, a.doc_title, a.doc_type, a.department, a.revision, a.effectivity_date, b.fullname, a.file_name, a.file_size
+                    FROM tbl_procedures a JOIN tbl_user b ON b.employee_id = a.requestor_id WHERE a.status = 'Effective' ORDER BY a.effectivity_date";
+
+        using var cmd = new MySqlCommand(sql, conn);
+        using var reader = cmd.ExecuteReader();
+
+        while (reader.Read())
+        {
+            items.Add(new ProcedureListItem
+            {
+                Id = Convert.ToInt32(reader["id"]),
+                DocNo = reader.GetString("doc_no"),
+                DocTitle = reader.GetString("doc_title"),
+                DocType = reader.GetString("doc_type"),
+                Department = reader.GetString("department"),
+                Revision = reader.GetString("revision"),
+                EffectivityDate = DateOnly.FromDateTime(reader.GetDateTime("effectivity_date")),
+                PreparedBy = reader.GetString("fullname"),
+                FileSize = Convert.ToInt64(reader["file_size"])
+            });
+        }
+
+        return items;
+    }
+
+    public ProcedureFile? GetFile(int id)
+    {
+        using var conn = new MySqlConnection(_connectionString);
+        conn.Open();
+
+        var sql = @"SELECT file_name, content_type, file_data FROM tbl_procedures WHERE id = @id, AND status = 'Effective'";
+
+        using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@id", id);
+        using var reader = cmd.ExecuteReader();
+
+        if (!reader.Read() || reader.IsDBNull(reader.GetOrdinal("file_data")))
+            return null;
+
+        return new ProcedureFile
+        {
+            FileName = reader.GetString("file_name"),
+            ContentType = reader.GetString("content_type"),
+            Data = (byte[])reader["file_data"]
+        };
+
+    }
+
 }
