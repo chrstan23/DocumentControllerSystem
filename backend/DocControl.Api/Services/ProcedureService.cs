@@ -127,7 +127,7 @@ public class ProcedureService : IProcedureService
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
 
-        var sql = @"SELECT file_name, content_type, file_data FROM tbl_procedures WHERE id = @id, AND status = 'Effective'";
+        var sql = @"SELECT file_name, content_type, file_data FROM tbl_procedures WHERE id = @id AND status = 'Effective'";
 
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@id", id);
