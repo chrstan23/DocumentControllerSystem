@@ -54,7 +54,7 @@ public class ProcedureService : IProcedureService
         var fileName = Path.GetFileName(file.FileName);
 
         var insertSql = @"INSERT INTO tbl_procedures (doc_no, doc_title, doc_type, department, revision, status, revision_status, requestor_id, effectivity_date, file_name, content_type, file_size, file_data)
-                        VALUES (@doc_no, @doc_title, @doc_type, @department, @revision, 'ACTIVE', 'APPROVED', @requestor_id, @effectivity_date, @file_name, 'application/pdf', @file_size, @file_data)";
+                        VALUES (@doc_no, @doc_title, @doc_type, @department, @revision, 'Effective', 'Completed', @requestor_id, @effectivity_date, @file_name, 'application/pdf', @file_size, @file_data)";
 
         using var cmd = new MySqlCommand(insertSql, conn);
         cmd.Parameters.AddWithValue("doc_no", docNo);
