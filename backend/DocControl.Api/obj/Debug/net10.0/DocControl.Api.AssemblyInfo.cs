@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DocControl.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e2fc546d13701b993be89e3fe93f476d88c9b959")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+67f2c62e37af5ce42b53cf1a4a6ba6def16597cf")]
 [assembly: System.Reflection.AssemblyProductAttribute("DocControl.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DocControl.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

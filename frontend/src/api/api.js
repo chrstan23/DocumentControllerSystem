@@ -24,4 +24,24 @@ export async function getFileUrl(id){
     return `${API_URL}/api/procedure/${id}/file`;
 }
 
+function readError(data) {
+    if(!data) return "Something went wrong.";
+    if (data.message) return data.message;
+    if (data.errors) return Object.values(data.errors).flat().join(" ");
+    return "Something went wrong.";
+}
+
+export async function addExistingProcedure(formData) {
+    const response = await fetch(`${API_URL}/api/procedures/existing`, {
+        method: "POST",
+        body: formData,
+    });
+
+    if (!response.ok){
+        const data = await response.json().catch(() => null);
+        throw new Error(readError(data));        
+    }
+    return response.json();
+}
+
 

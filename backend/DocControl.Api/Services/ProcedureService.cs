@@ -41,7 +41,7 @@ public class ProcedureService : IProcedureService
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
 
-        var checkSql = @"SELECT COUNT(*) FROM user WHERE employee_id = @id AND account_status in ('ACTIVE', 'INACTIVE')";
+        var checkSql = @"SELECT COUNT(*) FROM tbl_user WHERE employee_id = @id AND account_status in ('ACTIVE', 'INACTIVE')";
 
         using (var check = new MySqlCommand(checkSql, conn))
         {
@@ -53,7 +53,7 @@ public class ProcedureService : IProcedureService
         var docNo = form.DocNo.Trim();
         var fileName = Path.GetFileName(file.FileName);
 
-        var insertSql = @"INSERT INTO tbl_procedures doc_no, doc_title, doc_type, department, revision, status, revision_status, requestor_id, effectivity_date, file_name, content_type, file_size, file_data)
+        var insertSql = @"INSERT INTO tbl_procedures (doc_no, doc_title, doc_type, department, revision, status, revision_status, requestor_id, effectivity_date, file_name, content_type, file_size, file_data)
                         VALUES (@doc_no, @doc_title, @doc_type, @department, @revision, 'ACTIVE', 'APPROVED', @requestor_id, @effectivity_date, @file_name, 'application/pdf', @file_size, @file_data)";
 
         using var cmd = new MySqlCommand(insertSql, conn);
@@ -62,7 +62,7 @@ public class ProcedureService : IProcedureService
         cmd.Parameters.AddWithValue("doc_type", form.DocType.Trim());
         cmd.Parameters.AddWithValue("department", form.Department.Trim());
         cmd.Parameters.AddWithValue("revision", form.Revision);
-        cmd.Parameters.AddWithValue("requesor_id", form.RequestorId);
+        cmd.Parameters.AddWithValue("requestor_id", form.RequestorId);
         cmd.Parameters.AddWithValue("effectivity_date", form.EffectivityDate!.Value.ToDateTime(TimeOnly.MinValue));
         cmd.Parameters.AddWithValue("file_name", fileName);
         cmd.Parameters.AddWithValue("file_size", (uint)bytes.Length);
