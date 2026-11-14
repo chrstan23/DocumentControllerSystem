@@ -20,8 +20,8 @@ export async function getProcedures() {
     return response.json();
 }
 
-export async function getFileUrl(id){
-    return `${API_URL}/api/procedure/${id}/file`;
+export function getFileUrl(id){
+    return `${API_URL}/api/procedures/${id}/file`;
 }
 
 function readError(data) {
