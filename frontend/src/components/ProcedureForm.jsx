@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { addExistingProcedure, getRequestors, getDocTypes, getSections } from "../api/api";
-import { DEPARTMENTS, DOC_TYPES } from "../constants";
 import RequestorSelect from "./RequestorSelect";
 import LookupSelect from "./LookupSelect";
 
@@ -25,19 +24,34 @@ function ProcedureForm({ onAdded}){
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        Promise.all([getRequestors(), getDocTypes(), getSections()])
-            .then(([requestorList, docTypeList, sectionList]) =>{
+        Promise.all([getRequestors(), getDocTypes()])
+            .then(([requestorList, docTypeList]) =>{
                 setRequestors(requestorList);
                 setDocTypes(docTypeList);
-                setSections(sectionList);
             })
         .catch((err) => setError(err.message));
         //getRequestors().then(setRequestors).catch((err) => setError(err.message));
     }, []);
 
+    useEffect(() => {
+        if (!form.docType) {
+            setSections([]);
+            return
+        }
+
+        getSections(form.docType)
+        .then(setSections)
+        .catch((err) => setError(err.message));
+    }, [form.docType]);
+
     function handleChange(e){
         const { name, value } = e.target;
-        setForm({ ...form, [name]: value});
+
+        if (name === "docType"){
+            setForm({...form, docType: value, section: ""});
+        }else{
+            setForm({ ...form, [name]: value});            
+        }
     }
 
     function handleFileChange(e){
@@ -93,7 +107,7 @@ function ProcedureForm({ onAdded}){
             </div>
             <div>
                 <label>Section</label>
-                <LookupSelect name="section" items={sections} value={form.section} onChange={handleChange} placeholder="-- Select section --"/>
+                <LookupSelect name="section" items={sections} value={form.section} onChange={handleChange} placeholder={form.docType ? "-- Select section --" : "-- Select document type first --"} disabled={!form.docType}/>
             </div>
             
             <div>

@@ -10,8 +10,9 @@ export async function getRequestors() {
     return response.json();
 }
 
-export async function getSections() {
-    const response = await fetch(`${API_URL}/api/lookups/sections`);
+export async function getSections(docType = "") {
+    const query = docType ? `?docType=${encodeURIComponent(docType)}` : "";
+    const response = await fetch(`${API_URL}/api/lookups/sections${query}`);
 
     if (!response.ok){
         throw new Error("Failed to load sections.")

@@ -51,10 +51,13 @@ public class ProcedureService : IProcedureService
                 return Fail(AddProcedureStatus.RequestorNotFound, "Requestor Id not found.");
         }
 
+        var docType = form.DocType.Trim();
+        var section = form.Section.Trim();
+
         if(!LookupExists(conn, "tbl_doctype", form.DocType.Trim()))
             return Fail(AddProcedureStatus.InvalidLookup, "Document type not found.");
 
-        if(!LookupExists(conn, "tbl_section", form.Section.Trim()))
+        if(!SectionAllowedForDocType(conn, docType, section))
             return Fail(AddProcedureStatus.InvalidLookup, "Section type not found.");
 
         var docNo = form.DocNo.Trim();
@@ -103,6 +106,17 @@ public class ProcedureService : IProcedureService
 
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@name", name);
+
+        return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+    }
+
+    public static bool SectionAllowedForDocType(MySqlConnection conn, string docType, string section)
+    {
+        var sql = @"SELECT COUNT(*) FROM tbl_section s JOIN tbl_doctype t ON FIND_IN_SET(t.id, s.doctype_ids) > 0 WHERE t.name = docType AND s.name = @section";
+
+        using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@docType", docType);
+        cmd.Parameters.AddWithValue("@section", section);
 
         return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
     }

@@ -16,9 +16,9 @@ public class LookupsController : ControllerBase
     }
 
     [HttpGet("sections")]
-    public ActionResult<IEnumerable<LookupItem>> GetSections()
+    public ActionResult<IEnumerable<LookupItem>> GetSections([FromQuery] string? docType)
     {
-        return Ok(_lookupService.GetSections());
+        return Ok(_lookupService.GetSections(docType));
     }
 
     [HttpGet("doctypes")]
