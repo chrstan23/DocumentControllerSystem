@@ -12,7 +12,7 @@ function MasterlistTable({ procedures }) {
                     <th>Doc No</th>
                     <th>Title</th>
                     <th>Type</th>
-                    <th>Department</th>
+                    <th>Section</th>
                     <th>Rev</th>
                     <th>Effectivity Date</th>
                     <th>Preapared By</th>
@@ -25,7 +25,7 @@ function MasterlistTable({ procedures }) {
                         <td>{p.docNo}</td>
                         <td>{p.docTitle}</td>
                         <td>{p.docType}</td>
-                        <td>{p.department}</td>
+                        <td>{p.section}</td>
                         <td>{p.revision}</td>
                         <td>{p.effectivityDate}</td>
                         <td>{p.preparedBy}</td>

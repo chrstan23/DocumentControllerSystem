@@ -14,7 +14,7 @@ public class ExistingProcedureForm
     public string DocType { get; set; } = "";
     
     [Required, StringLength(50)]
-    public string Department { get; set; } = "";
+    public string Section { get; set; } = "";
     
     [Required, RegularExpression(@"^\d{2}$", ErrorMessage = "Revision must be 2 digits.")]
     public string Revision { get; set; } = "";

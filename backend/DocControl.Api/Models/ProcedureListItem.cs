@@ -6,7 +6,7 @@ public class ProcedureListItem
     public string DocNo { get; set; } = "";
     public string DocTitle { get; set; } = "";
     public string DocType { get; set; } = "";
-    public string Department { get; set; } = "";
+    public string Section { get; set; } = "";
     public string Revision { get; set; } = "";
     public DateOnly EffectivityDate { get; set; }
     public string PreparedBy { get; set; } = "";

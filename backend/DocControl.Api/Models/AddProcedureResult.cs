@@ -5,7 +5,8 @@ public enum AddProcedureStatus
     Created, 
     InvalidFile,
     RequestorNotFound,
-    Duplicate
+    Duplicate,
+    InvalidLookup
 }
 
 public class AddProcedureResult

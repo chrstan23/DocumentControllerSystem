@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 using DocControl.Api.Models;
 using MySqlConnector;
@@ -50,17 +51,23 @@ public class ProcedureService : IProcedureService
                 return Fail(AddProcedureStatus.RequestorNotFound, "Requestor Id not found.");
         }
 
+        if(!LookupExists(conn, "tbl_doctype", form.DocType.Trim()))
+            return Fail(AddProcedureStatus.InvalidLookup, "Document type not found.");
+
+        if(!LookupExists(conn, "tbl_section", form.Section.Trim()))
+            return Fail(AddProcedureStatus.InvalidLookup, "Section type not found.");
+
         var docNo = form.DocNo.Trim();
         var fileName = Path.GetFileName(file.FileName);
 
-        var insertSql = @"INSERT INTO tbl_procedures (doc_no, doc_title, doc_type, department, revision, status, revision_status, requestor_id, effectivity_date, file_name, content_type, file_size, file_data)
-                        VALUES (@doc_no, @doc_title, @doc_type, @department, @revision, 'Effective', 'Completed', @requestor_id, @effectivity_date, @file_name, 'application/pdf', @file_size, @file_data)";
+        var insertSql = @"INSERT INTO tbl_procedures (doc_no, doc_title, doc_type, section, revision, status, revision_status, requestor_id, effectivity_date, file_name, content_type, file_size, file_data)
+                        VALUES (@doc_no, @doc_title, @doc_type, @section, @revision, 'Effective', 'Completed', @requestor_id, @effectivity_date, @file_name, 'application/pdf', @file_size, @file_data)";
 
         using var cmd = new MySqlCommand(insertSql, conn);
         cmd.Parameters.AddWithValue("doc_no", docNo);
         cmd.Parameters.AddWithValue("doc_title", form.DocTitle.Trim());
         cmd.Parameters.AddWithValue("doc_type", form.DocType.Trim());
-        cmd.Parameters.AddWithValue("department", form.Department.Trim());
+        cmd.Parameters.AddWithValue("department", form.Section.Trim());
         cmd.Parameters.AddWithValue("revision", form.Revision);
         cmd.Parameters.AddWithValue("requestor_id", form.RequestorId);
         cmd.Parameters.AddWithValue("effectivity_date", form.EffectivityDate!.Value.ToDateTime(TimeOnly.MinValue));
@@ -90,6 +97,16 @@ public class ProcedureService : IProcedureService
         return new AddProcedureResult { Status = status, Message = message};
     }
 
+    private static bool LookupExists(MySqlConnection conn, string table, string name)
+    {
+        var sql = $"SELECT COUNT(*) from {table} WHERE name = @name";
+
+        using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@name", name);
+
+        return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+    }
+
     public List<ProcedureListItem> GetMasterlist()
     {
         var items = new List<ProcedureListItem>();
@@ -97,7 +114,7 @@ public class ProcedureService : IProcedureService
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
 
-        var sql = @"SELECT a.id, a.doc_no, a.doc_title, a.doc_type, a.department, a.revision, a.effectivity_date, b.fullname, a.file_name, a.file_size
+        var sql = @"SELECT a.id, a.doc_no, a.doc_title, a.doc_type, a.section, a.revision, a.effectivity_date, b.fullname, a.file_name, a.file_size
                     FROM tbl_procedures a JOIN tbl_user b ON b.employee_id = a.requestor_id WHERE a.status = 'Effective' ORDER BY a.effectivity_date";
 
         using var cmd = new MySqlCommand(sql, conn);
@@ -111,7 +128,7 @@ public class ProcedureService : IProcedureService
                 DocNo = reader.GetString("doc_no"),
                 DocTitle = reader.GetString("doc_title"),
                 DocType = reader.GetString("doc_type"),
-                Department = reader.GetString("department"),
+                Section = reader.GetString("section"),
                 Revision = reader.GetString("revision"),
                 EffectivityDate = DateOnly.FromDateTime(reader.GetDateTime("effectivity_date")),
                 PreparedBy = reader.GetString("fullname"),

@@ -2,7 +2,7 @@ using DocControl.Api.Models;
 using DocControl.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DoccControl.Api.Controllers;
+namespace DocControl.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

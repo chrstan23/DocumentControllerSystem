@@ -10,6 +10,26 @@ export async function getRequestors() {
     return response.json();
 }
 
+export async function getSections() {
+    const response = await fetch(`${API_URL}/api/lookups/sections`);
+
+    if (!response.ok){
+        throw new Error("Failed to load sections.")
+    }
+
+    return response.json();
+}
+
+export async function getDocTypes() {
+    const response = await fetch(`${API_URL}/api/lookups/doctypes`);
+
+    if (!response.ok){
+        throw new Error("Failed to load document types.")
+    }
+
+    return response.json();
+}
+
 export async function getProcedures() {
     const response = await fetch (`${API_URL}/api/procedures`);
 

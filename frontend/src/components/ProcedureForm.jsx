@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { addExistingProcedure, getRequestors } from "../api/api";
+import { addExistingProcedure, getRequestors, getDocTypes, getSections } from "../api/api";
 import { DEPARTMENTS, DOC_TYPES } from "../constants";
 import RequestorSelect from "./RequestorSelect";
+import LookupSelect from "./LookupSelect";
 
 const emptyForm = {
     docNo: "",
     docTitle: "",
     docType: "",
-    department: "",
+    section: "",
     revision: "",
     effectivityDate: "",
     requestorId: "",
@@ -17,12 +18,21 @@ function ProcedureForm({ onAdded}){
     const [form, setForm] = useState(emptyForm);
     const [file, setFile] = useState(null);
     const [requestors, setRequestors] = useState([]);
+    const [docTypes, setDocTypes] = useState([]);
+    const [sections, setSections] = useState([]);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        getRequestors().then(setRequestors).catch((err) => setError(err.message));
+        Promise.all([getRequestors(), getDocTypes(), getSections()])
+            .then(([requestorList, docTypeList, sectionList]) =>{
+                setRequestors(requestorList);
+                setDocTypes(docTypeList);
+                setSections(sectionList);
+            })
+        .catch((err) => setError(err.message));
+        //getRequestors().then(setRequestors).catch((err) => setError(err.message));
     }, []);
 
     function handleChange(e){
@@ -79,21 +89,11 @@ function ProcedureForm({ onAdded}){
             </div>
             <div>
                 <label>Document Type</label>
-                <select name="docType" value={form.docType} onChange={handleChange} required>
-                <option value="">-- Select type --</option>
-                {DOC_TYPES.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                ))}
-                </select>
+                <LookupSelect name="docType" items={docTypes} value={form.docType} onChange={handleChange} placeholder="-- Select section --"/>
             </div>
             <div>
-                <label>Department</label>
-                <select name="department" value={form.department} onChange={handleChange} required>
-                <option value="">-- Select type --</option>
-                {DEPARTMENTS.map((d) => (
-                    <option key={d} value={d}>{d}</option>
-                ))}
-                </select>
+                <label>Section</label>
+                <LookupSelect name="section" items={sections} value={form.section} onChange={handleChange} placeholder="-- Select section --"/>
             </div>
             
             <div>
