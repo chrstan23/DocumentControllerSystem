@@ -67,16 +67,16 @@ public class ProcedureService : IProcedureService
                         VALUES (@doc_no, @doc_title, @doc_type, @section, @revision, 'Effective', 'Completed', @requestor_id, @effectivity_date, @file_name, 'application/pdf', @file_size, @file_data)";
 
         using var cmd = new MySqlCommand(insertSql, conn);
-        cmd.Parameters.AddWithValue("doc_no", docNo);
-        cmd.Parameters.AddWithValue("doc_title", form.DocTitle.Trim());
-        cmd.Parameters.AddWithValue("doc_type", form.DocType.Trim());
-        cmd.Parameters.AddWithValue("department", form.Section.Trim());
-        cmd.Parameters.AddWithValue("revision", form.Revision);
-        cmd.Parameters.AddWithValue("requestor_id", form.RequestorId);
-        cmd.Parameters.AddWithValue("effectivity_date", form.EffectivityDate!.Value.ToDateTime(TimeOnly.MinValue));
-        cmd.Parameters.AddWithValue("file_name", fileName);
-        cmd.Parameters.AddWithValue("file_size", (uint)bytes.Length);
-        cmd.Parameters.AddWithValue("file_data", bytes);
+        cmd.Parameters.AddWithValue("@doc_no", docNo);
+        cmd.Parameters.AddWithValue("@doc_title", form.DocTitle.Trim());
+        cmd.Parameters.AddWithValue("@doc_type", form.DocType.Trim());
+        cmd.Parameters.AddWithValue("@section", form.Section.Trim());
+        cmd.Parameters.AddWithValue("@revision", form.Revision);
+        cmd.Parameters.AddWithValue("@requestor_id", form.RequestorId);
+        cmd.Parameters.AddWithValue("@effectivity_date", form.EffectivityDate!.Value.ToDateTime(TimeOnly.MinValue));
+        cmd.Parameters.AddWithValue("@file_name", fileName);
+        cmd.Parameters.AddWithValue("@file_size", (uint)bytes.Length);
+        cmd.Parameters.AddWithValue("@file_data", bytes);
 
         try
         {
@@ -112,7 +112,7 @@ public class ProcedureService : IProcedureService
 
     public static bool SectionAllowedForDocType(MySqlConnection conn, string docType, string section)
     {
-        var sql = @"SELECT COUNT(*) FROM tbl_section s JOIN tbl_doctype t ON FIND_IN_SET(t.id, s.doctype_ids) > 0 WHERE t.name = docType AND s.name = @section";
+        var sql = @"SELECT COUNT(*) FROM tbl_section s JOIN tbl_doctype t ON FIND_IN_SET(t.id, s.doctype_ids) > 0 WHERE t.name = @docType AND s.name = @section";
 
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@docType", docType);

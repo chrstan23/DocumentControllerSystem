@@ -15,7 +15,7 @@ function MasterlistTable({ procedures }) {
                     <th>Section</th>
                     <th>Rev</th>
                     <th>Effectivity Date</th>
-                    <th>Preapared By</th>
+                    <th>Prepared By</th>
                     <th>File</th>
                 </tr>
             </thead>
