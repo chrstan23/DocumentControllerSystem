@@ -11,6 +11,7 @@ builder.Services.AddScoped<IRequestorService, RequestorService>();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IProcedureService, ProcedureService>();
 builder.Services.AddScoped<ILookupService, LookupService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 const long maxRequestBytes = 210L * 1024 *1024; //max MB for files
 builder.Services.Configure<FormOptions>(o => o.MultipartBodyLengthLimit = maxRequestBytes); //Procedure Services

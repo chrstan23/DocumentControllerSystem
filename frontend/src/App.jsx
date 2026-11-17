@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react'
 import { getProcedures } from './api/api'
 import MasterlistTable from "./components/MasterlistTable"
 import ProcedureForm from './components/ProcedureForm';
+import TabBar from './components/TabBar';
+import DashboardPage from './pages/DashboardPage';
 
 function App() {
   const [procedures, setProcedures] = useState([]);
   const [error, setError] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   useEffect(() => {
     getProcedures().then(setProcedures).catch((err) => setError(err.message));
@@ -19,6 +22,10 @@ function App() {
   return (
     <div>
       <h1>Document Control System</h1>
+      <TabBar activeTab={activeTab} onChange={setActiveTab}/>
+
+      {activeTab === "dashboard" && <DashboardPage />}
+
       <ProcedureForm onAdded={handleAdded}/>
 
       <h2>Masterlist</h2>
