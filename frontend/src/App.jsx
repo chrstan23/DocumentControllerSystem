@@ -1,38 +1,25 @@
-import { useEffect, useState } from 'react'
-import { getProcedures } from './api/api'
-import MasterlistTable from "./components/MasterlistTable"
-import ProcedureForm from './components/ProcedureForm';
-import TabBar from './components/TabBar';
+import { Route, Routes } from 'react-router';
+import Layout from './components/Layout';
+import AddExistingPage from './pages/AddExistingPage';
 import DashboardPage from './pages/DashboardPage';
+import MasterlistPage from './pages/MasterlistPage';
+import ComingSoonPage from './pages/ComingSoonPage';
+
+
 
 function App() {
-  const [procedures, setProcedures] = useState([]);
-  const [error, setError] = useState("");
-  const [refreshKey, setRefreshKey] = useState(0);
-  const [activeTab, setActiveTab] = useState("dashboard");
-
-  useEffect(() => {
-    getProcedures().then(setProcedures).catch((err) => setError(err.message));
-  }, [refreshKey]);
-
-  function handleAdded(){
-    setRefreshKey(refreshKey + 1);
-  }
-
   return (
-    <div>
-      <h1>Document Control System</h1>
-      <TabBar activeTab={activeTab} onChange={setActiveTab}/>
-
-      {activeTab === "dashboard" && <DashboardPage />}
-
-      <ProcedureForm onAdded={handleAdded}/>
-
-      <h2>Masterlist</h2>
-      {error && <p>error</p>}
-      <MasterlistTable procedures={procedures}/>
-    </div>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<DashboardPage />}/>
+        <Route path='masterlist' element={<MasterlistPage />}/>
+        <Route path='create-document' element={<ComingSoonPage title="Create Document"/>}/>
+        <Route path='revision' element={<ComingSoonPage title="Revision"/>}/>        
+        <Route path='add-existing' element={<AddExistingPage />}/>
+        <Route path='manage-users' element={<ComingSoonPage title="Manage Users"/>}/>
+      </Route>
+    </Routes>
   );
 }
 
-export default App
+export default App;

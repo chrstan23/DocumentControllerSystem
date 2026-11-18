@@ -81,7 +81,7 @@ function ProcedureForm({ onAdded}){
             setForm(emptyForm);
             setFile(null);
             formElement.reset();
-            onAdded();
+            onAdded?.();
         } catch (err) {
             setError (err.message);
         } finally {

@@ -1,20 +1,31 @@
+import { NavLink } from "react-router";
+
 const TABS = [
-    {id: "dashboard", label: "Dashboard" },
+    { to: "/", label: "Dashboard", end: true },
+    { to: "/masterlist", label: "Document Masterlist" },
+    { to: "/create-document", label: "Create Document" },
+    { to: "/revision", label: "Revision" },
+    { to: "/add-existing", label: "Add ExistingUser" },
+    { to: "/manage-users", label: "Manage Users" },
+
 ];
 
-function TabBar({ activeTab, onChange }) {
+function TabBar() {
     return (
         <nav>
             {TABS.map((tab) => (
-                <button 
-                key={tab.id}
-                type="button"
-                onClick={() => onChange(tab.id)}
-                aria-current={tab.id === activeTab ? "page" : undefined}
-                style={{fontWeight: tab.id === activeTab ? "bold" : "normal"}}
+                <NavLink
+                    key={tab.to}
+                    to={tab.to}
+                    end={tab.end}
+                    style={({ isActive }) => ({
+                        fontWeight: isActive ? "bold" : "normal",
+                        marginRight: "16px",
+                    })}
                 >
                     {tab.label}
-                </button>
+                    
+                </NavLink>
             ))}
         </nav>
     );
