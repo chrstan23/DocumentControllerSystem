@@ -17,6 +17,7 @@ public class ProcedureService : IProcedureService
 
     public AddProcedureResult AddExisting(ExistingProcedureForm form)
     {
+        //validates the uploaded file 
         var file = form.File!;
 
         if (file.Length == 0)   //if there is no file uploaded, return an error
@@ -42,15 +43,7 @@ public class ProcedureService : IProcedureService
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
 
-        var checkSql = @"SELECT COUNT(*) FROM tbl_user WHERE employee_id = @id AND account_status in ('ACTIVE', 'INACTIVE')";
-
-        using (var check = new MySqlCommand(checkSql, conn))
-        {
-            check.Parameters.AddWithValue("@id", form.RequestorId);
-            if (Convert.ToInt32(check.ExecuteScalar()) == 0)
-                return Fail(AddProcedureStatus.RequestorNotFound, "Requestor Id not found.");
-        }
-
+        //checks if the document type exists and available sections for it
         var docType = form.DocType.Trim();
         var section = form.Section.Trim();
 
@@ -60,11 +53,12 @@ public class ProcedureService : IProcedureService
         if(!SectionAllowedForDocType(conn, docType, section))
             return Fail(AddProcedureStatus.InvalidLookup, "Section type not found.");
 
+        //saving the document to the database
         var docNo = form.DocNo.Trim();
         var fileName = Path.GetFileName(file.FileName);
 
-        var insertSql = @"INSERT INTO tbl_procedures (doc_no, doc_title, doc_type, section, revision, status, revision_status, requestor_id, effectivity_date, file_name, content_type, file_size, file_data)
-                        VALUES (@doc_no, @doc_title, @doc_type, @section, @revision, 'Effective', 'Completed', @requestor_id, @effectivity_date, @file_name, 'application/pdf', @file_size, @file_data)";
+        var insertSql = @"INSERT INTO tbl_procedures (doc_no, doc_title, doc_type, section, revision, status, revision_status, effectivity_date, prepared_by, file_name, content_type, file_size, file_data)
+                        VALUES (@doc_no, @doc_title, @doc_type, @section, @revision, 'Effective', 'Completed', @effectivity_date, @prepared_by, @file_name, 'application/pdf', @file_size, @file_data)";
 
         using var cmd = new MySqlCommand(insertSql, conn);
         cmd.Parameters.AddWithValue("@doc_no", docNo);
@@ -72,7 +66,7 @@ public class ProcedureService : IProcedureService
         cmd.Parameters.AddWithValue("@doc_type", form.DocType.Trim());
         cmd.Parameters.AddWithValue("@section", form.Section.Trim());
         cmd.Parameters.AddWithValue("@revision", form.Revision);
-        cmd.Parameters.AddWithValue("@requestor_id", form.RequestorId);
+        cmd.Parameters.AddWithValue("@prepared_by", form.PreparedBy.Trim());
         cmd.Parameters.AddWithValue("@effectivity_date", form.EffectivityDate!.Value.ToDateTime(TimeOnly.MinValue));
         cmd.Parameters.AddWithValue("@file_name", fileName);
         cmd.Parameters.AddWithValue("@file_size", (uint)bytes.Length);
@@ -95,6 +89,7 @@ public class ProcedureService : IProcedureService
             Id = cmd.LastInsertedId
         };
     }
+
     private static AddProcedureResult Fail(AddProcedureStatus status, string message)
     {
         return new AddProcedureResult { Status = status, Message = message};
@@ -128,8 +123,8 @@ public class ProcedureService : IProcedureService
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
 
-        var sql = @"SELECT a.id, a.doc_no, a.doc_title, a.doc_type, a.section, a.revision, a.effectivity_date, b.fullname, a.file_name, a.file_size
-                    FROM tbl_procedures a JOIN tbl_user b ON b.employee_id = a.requestor_id WHERE a.status = 'Effective' ORDER BY a.effectivity_date";
+        var sql = @"SELECT a.id, a.doc_no, a.doc_title, a.doc_type, a.section, a.revision, a.effectivity_date, a.prepared_by, a.file_name, a.file_size
+                    FROM tbl_procedures a WHERE a.status = 'Effective' ORDER BY a.effectivity_date DESC";
 
         using var cmd = new MySqlCommand(sql, conn);
         using var reader = cmd.ExecuteReader();
@@ -145,7 +140,7 @@ public class ProcedureService : IProcedureService
                 Section = reader.GetString("section"),
                 Revision = reader.GetString("revision"),
                 EffectivityDate = DateOnly.FromDateTime(reader.GetDateTime("effectivity_date")),
-                PreparedBy = reader.GetString("fullname"),
+                PreparedBy = reader.GetString("prepared_by"),
                 FileSize = Convert.ToInt64(reader["file_size"])
             });
         }

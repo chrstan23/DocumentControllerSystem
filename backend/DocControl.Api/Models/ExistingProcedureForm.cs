@@ -22,8 +22,8 @@ public class ExistingProcedureForm
     [Required]
     public DateOnly? EffectivityDate { get; set; }
 
-    [Required, RegularExpression(@"^\d{5}$", ErrorMessage = "Employee ID must be exactly 5 digits.")]
-    public string RequestorId {get; set; } = "";
+    [Required, StringLength(100)]
+    public string PreparedBy { get; set; } = "";
 
     [Required]
     public IFormFile? File { get; set; }

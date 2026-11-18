@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { addExistingProcedure, getRequestors, getDocTypes, getSections } from "../api/api";
-import RequestorSelect from "./RequestorSelect";
+import { addExistingProcedure, getDocTypes, getSections } from "../api/api";
 import LookupSelect from "./LookupSelect";
 
 const emptyForm = {
@@ -10,13 +9,12 @@ const emptyForm = {
     section: "",
     revision: "",
     effectivityDate: "",
-    requestorId: "",
+    preparedBy: "",
 };
 
 function ProcedureForm({ onAdded}){
     const [form, setForm] = useState(emptyForm);
     const [file, setFile] = useState(null);
-    const [requestors, setRequestors] = useState([]);
     const [docTypes, setDocTypes] = useState([]);
     const [sections, setSections] = useState([]);
     const [error, setError] = useState("");
@@ -24,13 +22,7 @@ function ProcedureForm({ onAdded}){
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        Promise.all([getRequestors(), getDocTypes()])
-            .then(([requestorList, docTypeList]) =>{
-                setRequestors(requestorList);
-                setDocTypes(docTypeList);
-            })
-        .catch((err) => setError(err.message));
-        //getRequestors().then(setRequestors).catch((err) => setError(err.message));
+        getDocTypes().then(setDocTypes).catch((err) => setError(err.message));
     }, []);
 
     useEffect(() => {
@@ -119,8 +111,9 @@ function ProcedureForm({ onAdded}){
                 <input type = "date" name="effectivityDate" value={form.effectivityDate} onChange={handleChange} required/>
             </div>
             <div>
-                <label>Requestor</label>
-                <RequestorSelect requestors={requestors} value={form.requestorId} onChange={handleChange}/>
+                <label>Prepared By</label>
+                {/* <RequestorSelect requestors={requestors} value={form.requestorId} onChange={handleChange}/> */}
+                <input name="preparedBy" value={form.preparedBy} onChange={handleChange} required/>
             </div>
             <div>
                 <label>PDF File</label>
