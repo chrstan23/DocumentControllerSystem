@@ -83,8 +83,6 @@ function ProcedureForm({ onAdded}){
 
     return (
         <form onSubmit = {handleSubmit}>
-            <h2>Add Existing Procedure</h2>
-
             <div>
                 <label>Document No</label>
                 <input name="docNo" value={form.docNo} onChange={handleChange} maxLength={30} required/>

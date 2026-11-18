@@ -5,7 +5,7 @@ const TABS = [
     { to: "/masterlist", label: "Document Masterlist" },
     { to: "/create-document", label: "Create Document" },
     { to: "/revision", label: "Revision" },
-    { to: "/add-existing", label: "Add ExistingUser" },
+    { to: "/add-existing", label: "Add Existing Document" },
     { to: "/manage-users", label: "Manage Users" },
 
 ];
