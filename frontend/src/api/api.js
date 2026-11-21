@@ -75,4 +75,45 @@ export async function getDashboard() {
     return response.json();
 }
 
+async function sendRequest(path, options){
+    const response = await fetch(`${API_URL}${path}`, options);
+
+    if (!response.ok){
+        const data = await response.json().catch(() => null);
+        throw new Error(readError(data));
+    }
+}
+
+export async function getUsers() {
+    const response = await fetch(`${API_URL}/api/users`);
+
+    if (!response.ok){
+        throw new Error("Failed to load users.");
+    }
+
+    return response.json();
+}
+
+export function updateUser(employeeId, user){
+    return sendRequest(`/api/users/${employeeId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+    });
+}
+
+export function setUserStatus(employeeId, active){
+    return sendRequest(`/api/users/${employeeId}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({active}),
+    });
+}
+
+export function deleteUser(employeeId){
+    return sendRequest(`/api/users/${employeeId}`, {
+        method: "DELETE"
+    });
+}
+
 

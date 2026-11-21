@@ -1,5 +1,4 @@
 using DocControl.Api.Models;
-using Microsoft.AspNetCore.Identity;
 using MySqlConnector;
 
 namespace DocControl.Api.Services;
@@ -51,9 +50,9 @@ public class UserService : IUserService
         if (state == null)
             return UserResult.Fail(UserOpStatus.NotFound, "User not found.");
 
-        var section = request.Section.Trim();
-        if(!SectionExists(conn, section))
-            return UserResult.Fail(UserOpStatus.Invalid, "Section not found.");
+        // var section = request.Section.Trim();
+        // if(!SectionExists(conn, section))
+        //     return UserResult.Fail(UserOpStatus.Invalid, "Section not found.");
 
         if (request.Role != "ADMIN" && IsOnlyActiveAdmin(conn, employeeId, state))
             return UserResult.Fail(UserOpStatus.Conflict, "You cannot change the role of the only active administrator.");
@@ -63,7 +62,7 @@ public class UserService : IUserService
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@username", request.UserName.Trim());
         cmd.Parameters.AddWithValue("@fullname", request.FullName.Trim());
-        cmd.Parameters.AddWithValue("@section", section);
+        cmd.Parameters.AddWithValue("@section", request.Section.Trim());
         cmd.Parameters.AddWithValue("@role", request.Role);
         cmd.Parameters.AddWithValue("@id", employeeId);
 
@@ -91,7 +90,7 @@ public class UserService : IUserService
         if (!active && IsOnlyActiveAdmin(conn, employeeId, state))
             return UserResult.Fail(UserOpStatus.Conflict, "You cannot deactivate the only active administrator.");
         
-        var sql = "UPDATE tbl_user SET account_status = @status WHERE employee_id = id";
+        var sql = "UPDATE tbl_user SET account_status = @status WHERE employee_id = @id";
 
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@status", active ? "ACTIVE" : "INACTIVE");
@@ -136,15 +135,15 @@ public class UserService : IUserService
         return new UserState(reader.GetString("role"), reader.GetString("account_status"));
     }
 
-    private static bool SectionExists(MySqlConnection conn, string name)
-    {
-        var sql = "SELECT COUNT(*) FROM tbl_section WHERE name = @name";
+    // private static bool SectionExists(MySqlConnection conn, string name)
+    // {
+    //     var sql = "SELECT COUNT(*) FROM tbl_section WHERE name = @name";
 
-        using var cmd = new MySqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("name", name);
+    //     using var cmd = new MySqlCommand(sql, conn);
+    //     cmd.Parameters.AddWithValue("name", name);
 
-        return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
-    }
+    //     return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+    // }
 
     private static bool IsOnlyActiveAdmin(MySqlConnection conn, string employeeId, UserState state)
     {

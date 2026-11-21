@@ -4,6 +4,7 @@ import AddExistingPage from './pages/AddExistingPage';
 import DashboardPage from './pages/DashboardPage';
 import MasterlistPage from './pages/MasterlistPage';
 import ComingSoonPage from './pages/ComingSoonPage';
+import ManageUsersPage from './pages/ManageUsersPage';
 
 
 
@@ -16,7 +17,7 @@ function App() {
         <Route path='create-document' element={<ComingSoonPage title="Create Document"/>}/>
         <Route path='revision' element={<ComingSoonPage title="Revision"/>}/>        
         <Route path='add-existing' element={<AddExistingPage />}/>
-        <Route path='manage-users' element={<ComingSoonPage title="Manage Users"/>}/>
+        <Route path='manage-users' element={<ManageUsersPage title="Manage Users"/>}/>
       </Route>
     </Routes>
   );
